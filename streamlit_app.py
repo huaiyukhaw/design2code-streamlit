@@ -36,7 +36,7 @@ def ImgURL_to_base64str(url):
     return base64.b64encode(requests.get(url).content).decode("utf-8")
 
 
-def drawboundingbox(img, boxes, pred_cls, scores, rect_th=1, text_size=0.35, text_th=1):
+def drawboundingbox(img, boxes, pred_cls, scores, rect_th=3, text_size=1, text_th=3):
 	img = PILImage_to_cv2(img)
 	class_color_dict = {}
 
