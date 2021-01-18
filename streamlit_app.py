@@ -36,7 +36,7 @@ def ImgURL_to_base64str(url):
     return base64.b64encode(requests.get(url).content).decode("utf-8")
 
 
-def drawboundingbox(img, boxes, pred_cls, scores, rect_th=4, text_size=3, text_th=4):
+def drawboundingbox(img, boxes, pred_cls, scores, rect_th=7, text_size=3, text_th=7):
 	img = PILImage_to_cv2(img)
 	class_color_dict = {}
 
@@ -58,7 +58,7 @@ def drawboundingbox(img, boxes, pred_cls, scores, rect_th=4, text_size=3, text_t
 		cv2.rectangle(img, start_point, end_point,
 						color=class_color_dict[i], thickness=rect_th)
 		
-		cv2.putText(img, pred_cls[i] + " " + str(scores[i]), (left, top-3), cv2.FONT_HERSHEY_SIMPLEX,
+		cv2.putText(img, pred_cls[i] + " " + str(scores[i]), (left, top-15), cv2.FONT_HERSHEY_SIMPLEX,
 					text_size, class_color_dict[i], thickness=text_th)
 
         
