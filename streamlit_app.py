@@ -85,7 +85,7 @@ st.markdown("<center><h2>or</h2></center>", unsafe_allow_html=True)
 
 url = st.text_input('Enter URL')
 
-threshold = st.slider('Threshold', min_value=0.0, max_value=1.0, value=0.4)
+threshold = st.slider('Threshold (0.40 by default)', min_value=0.0, max_value=1.0, value=0.4)
 
 if bytesObj or url:
     # In streamlit we will get a bytesIO object from the file_uploader
