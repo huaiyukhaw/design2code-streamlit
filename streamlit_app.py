@@ -39,10 +39,10 @@ def ImgURL_to_base64str(url):
 def drawboundingbox(img, boxes, pred_cls, scores, rect_th=10, text_size=3, text_th=10):
     img = PILImage_to_cv2(img)
     (H, W) = img.shape[:2]
-    rect_th = int(W * 0.002)
+    rect_th = int(W * 0.0025)
     text_size = int(W * 0.001)
-    text_th = int(W * 0.002)
-    padding = int(W * 0.015)
+    text_th = int(W * 0.0025)
+    padding = int(W * 0.012)
     class_color_dict = {}
     for i in range(len(boxes)):
         
