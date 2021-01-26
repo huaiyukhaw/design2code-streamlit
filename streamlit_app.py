@@ -39,10 +39,10 @@ def ImgURL_to_base64str(url):
 def drawboundingbox(img, boxes, pred_cls, scores, rect_th=10, text_size=3, text_th=10):
     img = PILImage_to_cv2(img)
     (H, W) = img.shape[:2]
-    rect_th = int(W * 0.0025)
-    text_size = int(W * 0.001)
-    text_th = int(W * 0.0025)
-    padding = int(W * 0.012)
+    rect_th = round(int(W * 0.0025))
+    text_size = round(int(W * 0.001))
+    text_th = round(int(W * 0.0025))
+    padding = round(int(W * 0.012))
     class_color_dict = {}
     for i in range(len(boxes)):
         
@@ -76,7 +76,8 @@ def drawboundingbox(img, boxes, pred_cls, scores, rect_th=10, text_size=3, text_
     plt.show()
 	
 st.set_option('deprecation.showPyplotGlobalUse', False)
-st.markdown("<h1>UI Detector with YOlOv4-Tiny on FastAPI</h1><br>", unsafe_allow_html=True)
+st.markdown("<h1>UI Detector with YOlOv4-Tiny</h1><br>", unsafe_allow_html=True)
+st.markdown("<p>Built by <a href='https://twitter.com/huaiyukhaw' target='_blank'>@huaiyukhaw</a></p><br>", unsafe_allow_html=True)
 
 bytesObj = st.file_uploader("Choose an image file")
 
