@@ -83,7 +83,7 @@ bytesObj = st.file_uploader("Choose an image file")
 
 st.markdown("<center><h2>or</h2></center>", unsafe_allow_html=True)
 
-url = st.text_input('Enter URL')
+url = st.text_input('Enter image URL')
 
 threshold = st.slider('Threshold (0.40 by default)', min_value=0.0, max_value=1.0, value=0.4)
 
