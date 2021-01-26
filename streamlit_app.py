@@ -37,40 +37,43 @@ def ImgURL_to_base64str(url):
 
 
 def drawboundingbox(img, boxes, pred_cls, scores, rect_th=10, text_size=3, text_th=10):
-	img = PILImage_to_cv2(img)
-	class_color_dict = {}
-
-	for i in range(len(boxes)):
-		class_color_dict[i] = [random.randint(0, 255) for _ in range(3)]
-		
-		left = int(boxes[i]['location']['left'])
-		
-		top = int(boxes[i]['location']['top'])
-		
-		width = int(boxes[i]['location']['width'])
-		
-		height = int(boxes[i]['location']['height'])
-		
-		start_point = (left, top)
-		
-		end_point = (left + width, top + height)
-		
-		cv2.rectangle(img, start_point, end_point,
-						color=class_color_dict[i], thickness=rect_th)
-		
-		cv2.putText(img, pred_cls[i] + " " + str(scores[i]), (left, top-18), cv2.FONT_HERSHEY_SIMPLEX,
-					text_size, class_color_dict[i], thickness=text_th)
-
+    img = PILImage_to_cv2(img)
+    (H, W) = img.shape[:2]
+    rect_th = int(W * 0.002)
+    text_size = int(W * 0.001)
+    text_th = int(W * 0.002)
+    padding = int(W * 0.015)
+    class_color_dict = {}
+    for i in range(len(boxes)):
         
-		plt.figure(figsize=(20, 30))
+        class_color_dict[i] = [random.randint(0, 255) for _ in range(3)]
+        
+        left = int(boxes[i][0] * W)
+        
+        top = int(boxes[i][1] * H)
+        
+        width = int(boxes[i][2] * W)
+        
+        height = int(boxes[i][3] * H)
+        
+        start_point = (left, top)
+        
+        end_point = (left + width, top + height)
+        
+        cv2.rectangle(img, start_point, end_point, color=class_color_dict[i], thickness=rect_th)
+                        
+        cv2.putText(img, pred_cls[i] + " " + str(scores[i]), (left, top-padding), cv2.FONT_HERSHEY_SIMPLEX,
+					text_size, class_color_dict[i], thickness=text_th)
+                    
+        plt.figure(figsize=(20, 30))
+        
+    plt.imshow(img)
     
-	plt.imshow(img)
+    plt.xticks([])
     
-	plt.xticks([])
+    plt.yticks([])
     
-	plt.yticks([])
-    
-	plt.show()
+    plt.show()
 	
 st.set_option('deprecation.showPyplotGlobalUse', False)
 st.markdown("<h1>UI Detector with YOlOv4-Tiny on FastAPI</h1><br>", unsafe_allow_html=True)
@@ -97,17 +100,18 @@ if bytesObj or url:
     # Run FastAPI
     payload = json.dumps({
         "base64": base64str,
-        "target": 'ui'
+        "threshold": 0.4
     })
 
     response = requests.post("http://ui.huaiyukhaw.com/detect", data=payload)
-    data_dict = response.json()['data']
-    labels = [data['result']['label'] for data in data_dict]
-    scores = [round(data['result']['score'], 4) for data in data_dict]
+    data = response.json()
+    boxes = [d['box'] for d in data]
+    pred_cls = [d['detectionString'] for d in data]
+    scores = [round(d['score'], 4) for d in data]
 
     st.markdown("<center><h1>Result</h1></center>", unsafe_allow_html=True)
-    drawboundingbox(img, data_dict, labels, scores)
+    drawboundingbox(img, boxes, pred_cls, scores)
     st.pyplot()
     st.markdown("<center><h1>FastAPI Response</h1></center><br>",
                 unsafe_allow_html=True)
-    st.write(data_dict)
+    st.write(data)
